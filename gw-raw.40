@@ -5,6 +5,9 @@
 # Get project name
 name="$1"
 
+# Get the passed drive letter or default to A
+drive_letter="${2:A}"
+
 # Include parent script
 if [[ -f "./gw-raw" ]]
 then
@@ -17,5 +20,5 @@ source "$parent" "$name" "source"
 # Create dir based on name and rip within it
 mkdir -p "$name"
 cd "$name"
-rip B "c=0-39:h=0-1"
+rip "$drive_letter" "c=0-39:h=0-1"
 cd ..

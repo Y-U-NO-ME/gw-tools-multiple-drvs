@@ -14,7 +14,7 @@ then
 else
 	parent="$(which gw-raw)"
 fi
-source "$parent" "$name" "source"
+source "$parent" "$name" "source" "$drive_letter"
 
 # Output file names
 img="$name.img"

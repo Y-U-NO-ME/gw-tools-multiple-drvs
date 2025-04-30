@@ -7,6 +7,10 @@
 # Get project name
 name="$1"
 
+# Get the passed drive letter or default to A
+drive_letter="${2:A}"
+
+
 # Include parent script
 if [[ -f "./gw-raw" ]]
 then
@@ -14,7 +18,7 @@ then
 else
 	parent="$(which gw-raw)"
 fi
-source "$parent" "$name" "source"
+source "$parent" "$name" "source" "$drive_letter"
 
 # Output file names
 img="$name.img"
@@ -51,5 +55,5 @@ function extract
 mkdir -p "$name"
 cd "$name"
 # Technically this is a single sided format, but will likely only ever be ripped in a double sided drive
-rip B "c=0-39"
+rip "$drive_letter" "c=0-39"
 cd ..

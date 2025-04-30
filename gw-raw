@@ -3,7 +3,13 @@
 
 
 # Setup parameters
-raw_name="$1"
+#raw_name="$1"
+#drive_letter="$2"
+#
+raw_name="$name"
+drive_letter="$drive_letter"
+
+
 project_dir="$(pwd)/$raw_name"
 timestamp="$(date +%Y-%m-%dT%H-%M-%S)"
 default_revs=3
@@ -20,6 +26,7 @@ log_extract="$timestamp-$pass-$name-extract.log"
 diskdefs="$(dirname "$(readlink -f "$0")")/diskdefs.cfg"
 hxc="$(dirname "$(readlink -f "$0")")/config.script"
 
+
 # Primary rip logic
 # Reads disk into Kryoflux format
 # Repeats recursivly one time with more revs if fails verification
@@ -30,7 +37,8 @@ function rip # 1-Drive 2-Tracks
 	# I would recommend using A/B over 0/1 because "0" doesn't work for me
 	if [[ "$1" != "" ]]
 	then
-		drive="--drive=$1"
+		#drive="--drive=$1"
+		drive="--drive $drive_letter"
 	else
 		drive=""
 	fi
@@ -46,7 +54,8 @@ function rip # 1-Drive 2-Tracks
 	# Check for track information
 	# This is the full TSPEC that gw supports, over ripping tracks is 
 	# preferable, but you need to limit to 40 on a DD 360k drive.
-	if [[ "$2" != "" ]]
+	#if [[ "$2" != "" ]]
+	if [[ "$3" != "" ]]
 	then
 		tracks="--tracks $2$step"
 	else
@@ -63,6 +72,7 @@ function rip # 1-Drive 2-Tracks
 	raw="$rdir/track00.0.raw"
 	if [[ ! -f "$raw" ]]
 	then
+		echo "my command: gw read $drive $tracks --revs=$revs $raw"
 		gw read $drive $tracks --revs=$revs "$raw"  2>&1 | tee -a "$log_rip"
 	else
 		echo "Kryoflux rips found, skipping to decode"
@@ -175,6 +185,6 @@ echo "Ripping raw data only"
 # Create dir based on name and rip within it
 mkdir "$raw_name"
 cd "$project_dir"
-rip A
+rip "$drive_letter"
 cd ..
 
